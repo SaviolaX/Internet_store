@@ -1,0 +1,56 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+<section class="category-content">
+	<div class="category-cards">
+		{% for category in categories %}
+		<a href="{% url 'index' %}?category={{category.category_title}}">
+			<div class="category-card">
+				<div class="category-card-image">
+					<img src="{{category.category_image.url}}" alt="">
+				</div>
+				<div class="category-card-content">
+					<div class="category-card-title">
+						<p>{{category.category_title}}</p>
+					</div>
+				</div>
+			</div>
+	    </a>
+		{% empty %}
+		<p style="color: white; margin-top:50px; font-size: 30px;">No categories created...</p>
+		{% endfor %}
+	</div>
+</section>
+
+
+<section class="content">
+	<hr class="new">
+	<div class="cards">
+		{% for item in items %}
+		<div class="card">
+			<a class="card-href" href="{% url 'item_info' item.id %}">
+				<div class="card-image">
+					<img src='{{item.image.url}}' alt="">
+				</div>
+				<div class="card-content">
+					<div class="card-title">
+						<p>{{item.title}}</p>
+					</div>
+					<div class="card-info">
+						<p class="card-price">${{item.price}}</p>
+						<div class="card-info-buttons">
+							<a href="{% url 'add' item.id %}" class="card-buy" type="submit">Add to cart</a>
+							<a href="{% url 'buy' item.id %}" class="card-buy">Buy</a>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+		{% empty %}
+		<p style="color: white; margin-top:50px; font-size: 30px;">No images added...</p>
+		{% endfor %}
+	</div>
+</section>							
+
+{% endblock content %}
+

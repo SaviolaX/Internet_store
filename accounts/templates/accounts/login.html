@@ -1,0 +1,25 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+<div class="content">
+	<div class="login-block">
+		<form method="POST" action="">
+			{% csrf_token %}
+			
+			{% if form.errors %}
+			<p>Username or password incorrect</p>
+			{% endif %}
+
+			<p>Username</p>
+			<input type="text" id="username" name="username" placeholder="username">
+			<p>Password</p>
+			<input type="password" name="password" id="password" placeholder="password">
+			<button class="login-block-button" type="submit">Submit</button>
+			{{ message }}
+		</form>
+		<p>If you do not have an account: <a style="color: #29af4c; " href="{% url 'register' %}">Register</a></p>
+	</div>
+</div>
+
+{% endblock content %}

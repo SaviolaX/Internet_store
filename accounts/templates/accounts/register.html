@@ -1,0 +1,29 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="content">
+	<div class="registration-block">
+		<form method="POST" action="">
+			{% csrf_token %}
+
+			{{ form.username.label }}
+			{{ form.username }}
+
+			{{ form.email.label }}
+			{{ form.email }}
+
+			{{ form.password1.label }}
+			{{ form.password1 }}
+
+			{{ form.password2.label }}
+			{{ form.password2 }}
+
+			<button class="registration-block-button" type="submit">Submit</button>
+		</form>
+		<p>If you have an account: <a style="color: #29af4c;" href="{% url 'login' %}">Login</a></p>
+	</div>
+</div>
+
+
+{% endblock content %}
+

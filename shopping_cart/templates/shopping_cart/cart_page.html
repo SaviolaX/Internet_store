@@ -1,0 +1,62 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+{% if order != None %}
+	<div class="content">
+		<div class="cart-title">
+			<h2>Items in your cart</h2>
+		</div>
+		<div class="cart-box">
+			<br>
+			<div class="cart-box-titles">
+				<p class="cart-box-titles-product">Product</p>
+				<p class="cart-box-titles-quantity">Qty</p>
+				<p class="cart-box-titles-total">Price</p>
+			</div>
+			<hr style="border: 0;height: 1px;background-color: rgba(10, 151, 161, 0.96);">
+			{% for item in order.orderitem_set.all %}
+			<div class="cart-box-product">
+				<div class="cart-box-product-box">
+					<img src="{{item.product.image.url}}">
+					<div class="cart-box-product-box-text">
+						<p class="cart-box-product-box-text-title">{{item.product.name}}</p>
+						<div class="cart-box-product-box-text-details">
+							<p>Article/id: {{item.product.id}}</p>
+							<p>In stock</p>
+						</div>
+					</div>
+				</div>
+				<div class="cart-box-quantity-box">
+					<div>
+						<a class="cart-box-quantity-box-minus-plus" href="{% url 'minus' item.id %}">-</a>
+					</div>
+					<p>{{item.quantity}}</p>
+					<div>
+						<a class="cart-box-quantity-box-minus-plus" href="{% url 'plus' item.id %}">+</a>
+					</div>
+				</div>
+				<div class="cart-box-total-box">
+					<p>${{item.get_total|floatformat:2}}</p>
+				</div>
+				<div class="cart-box-delete">
+					<a href="{% url 'del' item.id %}" title="Delete" type="submit">X</a>
+				</div>
+			</div>
+			{% endfor %}	
+		</div>
+		<div class="cart-payment-box">
+			<div class="cart-payment-box-total">
+				<p class="cart-payment-box-total-word">Total items: {{order.get_cart_items}}</p>
+				<p class="cart-payment-box-total-amount">Total price: ${{order.get_cart_total|floatformat:2}}</p>
+			</div>
+			<div class="cart-payment-box-links">
+				<a class="cart-payment-box-links-continue" href="{% url 'index' %}">Continue shopping</a>
+				<a class="cart-payment-box-links-checkout" href="{% url 'checkout' %}">Сheckout</a>
+			</div>
+		</div>
+	</div>
+{% else %}
+<p>No items in cart</p>
+{% endif %}
+{% endblock content %}
+		

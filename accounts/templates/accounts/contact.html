@@ -1,0 +1,41 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+	
+	<div class="content">
+		{% if messages %}
+			{% for message in messages %}
+			<p style="text-align: center; color: green; margin: 20px 0;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+			{% endfor %}
+		{% endif %}
+		<h2 class="contact-block-headers">You can leave your contact and we will connect with you</h2>
+		<div class="contact-block">
+			<form method="POST" action="">
+				{% csrf_token %}
+
+				<p>Name</p>
+				<input type="text" name="name" maxlength="100" required="" id="id_name">
+
+				<p>Phone number</p>
+				<input type="tel" name="phone" maxlength="128" id="id_phone">
+
+				<p>Email</p>
+				<input type="email" name="email" maxlength="254" id="id_email">
+
+				<button class="contact-block-button" type="submit">Send</button>
+			</form>
+			<div class="contact-block-info">
+				<h2 class="contact-block-headers">You can contact us straight</h2>
+				<p>+380(0642)537966 - Manager1</p>
+				<p>+380(0642)537966 - Manager2</p>
+				<p>+380(0642)537966 - Manager3</p>
+				<p>+380(0642)537966 - Manager4</p>
+
+				<p>Our address: Los Angeles, Paleto Bay 17/7</p>
+			</div>
+			
+		</div>
+
+	</div>
+
+{% endblock content %}

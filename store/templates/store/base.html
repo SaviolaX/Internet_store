@@ -1,0 +1,172 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Internet store</title>
+
+
+		<link rel="stylesheet" href="{% static './css/style.css' %}">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+		<link rel="icon"href="{% static './images/python.ico' %}">
+
+	</head>
+	<body>
+		<header id="top">
+			
+			<div class="title_logo">
+				<img class="logo" src="{% static './images/logo_links/python.png' %}" alt="logo">
+				<p>Internet store</p>
+			</div>
+			<nav>
+				<ul class="nav_links">
+					<li><a href="{% url 'index' %}">Home</a></li>
+					<li><a href="{% url 'contact' %}">Contact</a></li>
+					{% if user.is_authenticated %}
+					<li>{{ user }} <a href="{% url 'logout' %}">Log out</a></li>
+					{% else %}
+					<li><a href="{% url 'register' %}">Registration</a></li>
+					<li><a href="{% url 'login' %}">Log in</a></li>
+					{% endif %}
+				</ul>
+			</nav>
+			<div class="cart">
+				<a class="cart-title" href="{% url 'cart' %}">Cart &#8722; 
+				<span>
+					{% if total_items_in_order %}
+						{{total_items_in_order.get_cart_items}}
+					{% else %}
+						0
+					{% endif %}
+				</span></a>
+			</div>
+		</header>
+
+		{% block content %}
+
+		{% endblock content %}
+
+		<div id="topAutoScroll">
+
+		</div>
+
+		<footer>
+			
+			<div class="footer_logo">
+				<img class="logo" src="{% static './images/logo_links/python.png' %}" alt="logo">
+				<p>Internet store</p>
+			</div>
+				
+			<div class="footer-info">
+				<div class="footer-description">
+					<p class="footer-adress-title">Address</p>
+					<p class="footer-adress-text">Los Angeles, Paleto Bay 17/7</p>
+				</div>
+
+				<div class="footer-description">
+					<p class="footer-adress-title">Something else</p>
+					<p class="footer-adress-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro facilis maiores voluptates sequi quasi quae.</p>
+				</div>
+
+				<div class="footer-description">
+					<p class="footer-adress-title">Maps</p>
+					<div style="width: 100px; height: 50px;">
+				      <a href="https://www.google.com/maps/place/Palo+Alto+St,+Los+Angeles,+CA+90026,+USA/@34.0682092,-118.2661566,16z/data=!4m5!3m4!1s0x80c2c705cef70d13:0x8b11886dd9f1a481!8m2!3d34.0693024!4d-118.2621547">
+				        <img style="width: 100%;" src="https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg" alt="">
+				      </a>
+				    </div>
+				</div>
+			</div>
+
+			<div class="social-links">
+				<p>Social links:</p>
+				<div>
+					<img  class="links" src="{% static './images/logo_links/instagram1.png' %}" alt="link">
+					<img  class="links" src="{% static './images/logo_links/facebook1.png' %}" alt="link">
+					<img  class="links" src="{% static './images/logo_links/twitter1.png' %}" alt="link">
+					<img  class="links" src="{% static './images/logo_links/youtube1.png' %}" alt="link">
+				</div>
+			</div>
+		</footer>
+
+		<script type="text/javascript">
+			// scroll to top
+			$(function() {
+				$(window).scroll(function() {
+					if($(this).scrollTop() != 0) {
+						$('#topAutoScroll').fadeIn();
+					} 
+					else {
+						$('#topAutoScroll').fadeOut();
+					}
+				});
+			$('#topAutoScroll').click(function() {
+				$('body,html').animate({scrollTop:0},700);
+				});
+			});
+
+			  // dropdown menu on click
+			function myFunction() {
+			  document.getElementById("myDropdown").classList.toggle("show");
+			}
+
+			// Close the dropdown if the user clicks outside of it
+			window.onclick = function(event) {
+			  if (!event.target.matches('.dropbtn')) {
+			    var dropdowns = document.getElementsByClassName("dropdown-content");
+			    var i;
+			    for (i = 0; i < dropdowns.length; i++) {
+			      var openDropdown = dropdowns[i];
+			      if (openDropdown.classList.contains('show')) {
+			        openDropdown.classList.remove('show');
+			      }
+			    }
+			  }
+			}
+		</script>
+
+
+		<script type="text/javascript">
+
+			function getCookie(name) {
+			    var cookieValue = null;
+			    if (document.cookie && document.cookie !== '') {
+			        var cookies = document.cookie.split(';');
+			        for (var i = 0; i < cookies.length; i++) {
+			            var cookie = cookies[i].trim();
+			            // Does this cookie string begin with the name we want?
+			            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+			                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+			                break;
+			            }
+			        }
+			    }
+			    return cookieValue;
+			}
+
+
+			function uuidv4() {
+			  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+			    return v.toString(16);
+			  });
+			}
+
+
+
+
+			let device = getCookie('device')
+
+			if (device == null || device == undefined){
+				device = uuidv4()
+			}
+
+			document.cookie ='device=' + device + ";domain=;path=/"
+
+		</script>
+
+	</body>
+</html>

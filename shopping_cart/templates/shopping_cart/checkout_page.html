@@ -1,0 +1,50 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+{% if order != None %}
+
+<div class="content">
+	<div class="checkout-block">
+		<div class="cart-box-titles">
+			<p class="cart-box-titles-product">Product</p>
+			<p class="cart-box-titles-quantity">Qty</p>
+			<p class="cart-box-titles-total">Price</p>
+		</div>
+		<hr style="border: 0;height: 1px;background-color: rgba(10, 151, 161, 0.96);">
+		{% for item in order.orderitem_set.all %}
+		<div class="checkout-box-product">
+			<div class="cart-box-product-box">
+				<img src="{{item.product.image.url}}">
+				<div class="cart-box-product-box-text">
+					<p class="cart-box-product-box-text-title">{{item.product.name}}</p>
+					<div class="cart-box-product-box-text-details">
+						<p>Article/id: {{item.product.id}}</p>
+						<p>In stock</p>
+					</div>
+				</div>
+			</div>
+			<div class="cart-box-quantity-box">
+				<p>{{item.quantity}}</p>
+			</div>
+			<div class="cart-box-total-box">
+				<p>${{item.get_total|floatformat:2}}</p>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="checkout-payment-box">
+		<div class="cart-payment-box-total">
+			<p class="cart-payment-box-total-word">Total items: {{order.get_cart_items}}</p>
+			<p name="total_sum" class="cart-payment-box-total-amount">Total price: ${{order.get_cart_total|floatformat:2}}</p>
+		</div>
+		<div class="checkout-payment-box-links">
+			<a class="checkout-payment-box-links-shopping" href="{% url 'index' %}">Continue shopping</a>
+			<form style="display:contents;" action="" method="POST">
+				<a class="checkout-payment-box-links-payment" href="{% url 'payment' %}">Payment</a>
+			</form>
+			
+		</div>
+	</div>
+</div>
+{% endif %}
+{% endblock content %}

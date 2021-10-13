@@ -1,0 +1,85 @@
+{% extends 'store/base.html' %}
+{% block content %}
+	
+	<section class="content">
+		<div class="product-top-content">
+			<div class="product-top-content-wrapper">
+				<div class="product-image">
+					<img src="{{item.image.url}}" alt="">
+				</div>
+				<div class="product-info">
+					<h4 class="product-title">{{item.title}}</h4>
+					<p class="product-article">Article/id: <span>{{item.id}}</span></p>
+					<p class="product-code">Product code: <span>12312</span></p>
+					<hr class="new1">
+					<br>
+					<p class="product-price">$ {{item.price}}</p>
+					<br>
+					<hr class="new1">
+					<br>	
+					<p class="product-info-service">Shipping:</p>
+					<p class="product-info-service-details">FedEx, New Post, Meest, Amazon, Rozetka</p>
+					<p class="product-info-service">Payment:</p>
+					<p class="product-info-service-details">Cash, VISA, MasterCard, Paypal, GooglePay</p>
+					<p class="product-info-service">Return</p>
+					<p class="product-info-service-details">Product can be returned during 14 days</p>
+					<p class="product-info-service">Quality</p>
+					<p class="product-info-service-details">100% ORIGINAL</p>
+
+					<hr class="new1">
+					<div class="product-buttons">
+						<a href="{% url 'buy' item.id %}" class="product-fast-buy">Buy with 1 click</a>
+						<a href="{% url 'add' item.id %}" class="product-add-to-cart">Add to cart</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+
+		<div class="product-description">
+			<h4 class="product-description-title">Description</h4>
+			{% if item.description %}
+			<p class="product-description-text">{{ item.description }}</p>
+			{% else %}
+			<p style="color: yellow;">----No description----</p>
+			{% endif %}
+		</div>
+
+		<hr class="new">
+
+		<div class="product-comment">
+			<h4>Comments</h4>
+			<div class="product-comment-input">
+				<form action="" method="POST">
+					{% csrf_token %}
+
+					<textarea class="product_comment_textarea" type='text' name="comment_text" id="id_comment_text" placeholder="write here"></textarea>
+
+					<button type="submit">Post</button>
+				</form>
+			</div>
+			{% for comment in item.comments.all %}
+			<div class="product-comment-section">
+				<hr class="new1">
+				<br>
+				<p class="product-comment-author">Author - <span>{{comment.comment_author}}</span></p>
+				<span class="product-comment-date">date-{{comment.created_on}}</span>
+				<hr class="new">
+				<p class="product-comment-text">
+					{{comment.comment_text}}
+				</p>
+				<br>
+				{% if comment.comment_author == request.user %}
+				<div class="product-comment-buttons">
+					<a style="color: #dc3e3e;" href="{% url 'del_comment' comment.id %}">Delete</a>
+				</div>
+				{% else %}
+				{% endif %}
+				<hr class="new2">
+			</div>
+			{% empty %}
+			<p style="text-align:center; margin: 20px 0; color: white; font-size: 25px;">No comments</p>
+			{% endfor %}
+		</div>
+	</section>
+{% endblock content %}
