@@ -1,7 +1,7 @@
 from django.db import models
 from django.shortcuts import reverse
 
-from django.contrib.auth.models import User
+from accounts.models import Customer
 # Create your models here.
 
 
@@ -46,7 +46,8 @@ class Comment(models.Model):
     """Comments to products"""
     product = models.ForeignKey(
         Product, related_name='comments', on_delete=models.CASCADE)
-    comment_author = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment_author = models.ForeignKey(
+        Customer, on_delete=models.CASCADE)
     comment_text = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
 

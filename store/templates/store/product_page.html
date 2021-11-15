@@ -39,9 +39,9 @@
 		<div class="product-description">
 			<h4 class="product-description-title">Description</h4>
 			{% if item.description %}
-			<p class="product-description-text">{{ item.description }}</p>
+				<p class="product-description-text">{{ item.description }}</p>
 			{% else %}
-			<p style="color: yellow;">----No description----</p>
+				<p style="color: yellow;">----No description----</p>
 			{% endif %}
 		</div>
 
@@ -59,26 +59,26 @@
 				</form>
 			</div>
 			{% for comment in item.comments.all %}
-			<div class="product-comment-section">
-				<hr class="new1">
-				<br>
-				<p class="product-comment-author">Author - <span>{{comment.comment_author}}</span></p>
-				<span class="product-comment-date">date-{{comment.created_on}}</span>
-				<hr class="new">
-				<p class="product-comment-text">
-					{{comment.comment_text}}
-				</p>
-				<br>
-				{% if comment.comment_author == request.user %}
-				<div class="product-comment-buttons">
-					<a style="color: #dc3e3e;" href="{% url 'del_comment' comment.id %}">Delete</a>
+				<div class="product-comment-section">
+					<hr class="new1">
+					<br>
+					<p class="product-comment-author">Author - <span>{{comment.comment_author}}</span></p>
+					<span class="product-comment-date">date-{{comment.created_on}}</span>
+					<hr class="new">
+					<p class="product-comment-text">
+						{{comment.comment_text}}
+					</p>
+					<br>
+					{% if request.user.customer == comment.comment_author %}
+					<div class="product-comment-buttons">
+						<a style="color: #dc3e3e;" href="{% url 'del_comment' comment.id %}">Delete</a>
+					</div>
+					{% else %}
+					{% endif %}
+					<hr class="new2">
 				</div>
-				{% else %}
-				{% endif %}
-				<hr class="new2">
-			</div>
 			{% empty %}
-			<p style="text-align:center; margin: 20px 0; color: white; font-size: 25px;">No comments</p>
+				<p style="text-align:center; margin: 20px 0; color: white; font-size: 25px;">No comments</p>
 			{% endfor %}
 		</div>
 	</section>

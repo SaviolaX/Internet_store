@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 
 from .models import Product, Category
-from accounts.models import Customer
+from .forms import CommentForm
 
 # from django.http import request
 
@@ -26,4 +26,22 @@ def get_product_by_id(pk):
     return Product.objects.get(id=pk)
 
 
+def comment_creation(request, item):
+    form = CommentForm()
 
+    new_comment = []
+
+    if request.method == 'POST':
+        form = CommentForm(data=request.POST)
+        if form.is_valid():
+            # Create comment object but not save in to database yet
+            new_comment = form.save(commit=False)
+            # Assign the current product to the comment
+            new_comment.product = item
+            if request.user.is_authenticated:
+                new_comment.comment_author = request.user.customer
+            else:
+                return redirect('login')
+            # Save the comment to the database
+            new_comment.save()
+            return redirect('item_info', item.id)

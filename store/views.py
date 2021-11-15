@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from shopping_cart.models import Order
 from .models import Comment
 from .services import *
 from .forms import CommentForm
+from shopping_cart.services import cart_total
 
 from cloudipsp import Api, Checkout
 
@@ -25,16 +25,7 @@ def index(request):
     else:
         items = get_all_products_filtred_by_category(category)
 
-    if request.user.is_authenticated:
-        # Get total items in cart
-        try:
-            customer = request.user.customer
-        except:
-            device = request.COOKIES['device']
-            customer, created = Customer.objects.get_or_create(device=device)
-
-        total_items_in_order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
+    total_items_in_order = cart_total(request)
 
     context = {'items': items, 'categories': categories,
                'total_items_in_order': total_items_in_order}
@@ -43,39 +34,12 @@ def index(request):
 
 def product_detail(request, pk):
     """Display info about item"""
-
     item = get_product_by_id(pk)
-
-    if request.user.is_authenticated:
-        # Get total items in cart
-        try:
-            customer = request.user.customer
-        except:
-            device = request.COOKIES['device']
-            customer, created = Customer.objects.get_or_create(device=device)
-
-        total_items_in_order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
-
+    # Get total items in cart
+    total_items_in_order = cart_total(request)
     # Add comment
     form = CommentForm()
-
-    new_comment = []
-
-    if request.method == 'POST':
-        form = CommentForm(data=request.POST)
-        if form.is_valid():
-            # Create comment object but not save in to database yet
-            new_comment = form.save(commit=False)
-            # Assign the current product to the comment
-            new_comment.product = item
-            if request.user.is_authenticated:
-                new_comment.comment_author = request.user
-            else:
-                return redirect('login')
-            # Save the comment to the database
-            new_comment.save()
-            return redirect('item_info', item.id)
+    new_comment = comment_creation(request, item=item)
 
     context = {'item': item, 'total_items_in_order': total_items_in_order,
                'form': form, 'new_comment': new_comment}
@@ -85,7 +49,6 @@ def product_detail(request, pk):
 @login_required(login_url='login')
 def product_comment(request, pk):
     """Get comments for each product"""
-
     comments = Comment.objects.get(id=pk)
 
     context = {'comments': comments}
@@ -95,10 +58,9 @@ def product_comment(request, pk):
 @login_required(login_url='login')
 def delete_comment(request, pk):
     """Delete comment"""
-
     item = get_product_by_id(pk)
     comment = Comment.objects.get(id=pk)
-    if comment.comment_author == request.user:
+    if comment.comment_author == request.user.customer:
         comment.delete()
         return redirect('item_info', item.id)
 

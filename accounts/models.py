@@ -1,13 +1,15 @@
 from django.db import models
 
-from django.contrib.auth.models import User
+from django.conf import settings
 
 from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Customer(models.Model):
-    user = models.OneToOneField(
-        User, null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                null=True,
+                                blank=True,
+                                on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True, blank=True)
     email = models.CharField(max_length=200, null=True, blank=True)
     device = models.CharField(max_length=200, null=True, blank=True)
