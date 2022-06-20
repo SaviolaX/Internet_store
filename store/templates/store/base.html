@@ -36,11 +36,12 @@
 			<div class="cart">
 				<a class="cart-title" href="{% url 'cart' %}">Cart &#8722; 
 				<span>
-					{% if total_items_in_order %}
-						{{total_items_in_order.get_cart_items}}
-					{% else %}
-						0
-					{% endif %}
+						{% if total %}
+							{{total.get_cart_items}}
+						{% else %}
+							0
+						{% endif %}
+
 				</span></a>
 			</div>
 		</header>
@@ -162,6 +163,7 @@
 
 			if (device == null || device == undefined){
 				device = uuidv4()
+				console.log(device)
 			}
 
 			document.cookie ='device=' + device + ";domain=;path=/"

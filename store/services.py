@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Product, Category
 from .forms import CommentForm
@@ -23,7 +23,7 @@ def get_all_products_filtred_by_category(category):
 
 def get_product_by_id(pk):
     """Get item by id"""
-    return Product.objects.get(id=pk)
+    return get_object_or_404(Product, id=pk)
 
 
 def comment_creation(request, item):
@@ -45,3 +45,13 @@ def comment_creation(request, item):
             # Save the comment to the database
             new_comment.save()
             return redirect('item_info', item.id)
+
+
+def render_template_with_total_in_context(request, categories, total, items):
+    context = {'items': items, 'categories': categories, 'total': total}
+    return render(request, 'store/index.html', context)
+
+
+def render_template_without_total_in_context(request, categories, items):
+    context = {'items': items, 'categories': categories}
+    return render(request, 'store/index.html', context)

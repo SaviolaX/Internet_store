@@ -71,7 +71,7 @@
 					<br>
 					{% if request.user.customer == comment.comment_author %}
 					<div class="product-comment-buttons">
-						<a style="color: #dc3e3e;" href="{% url 'del_comment' comment.id %}">Delete</a>
+						<a style="color: #dc3e3e;" href="{% url 'del_comment' comment.pk %}">Delete</a>
 					</div>
 					{% else %}
 					{% endif %}
